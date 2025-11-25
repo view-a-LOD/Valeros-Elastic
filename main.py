@@ -151,7 +151,7 @@ def index_documents(es: Elasticsearch, index_name: str, documents: Dict[str, Dic
 
 def main():
     cwd = os.getcwd()
-    file_path = os.path.join(cwd, "amerongen.trig")
+    file_path = os.path.join(cwd, "data.trig")
 
     graph = load_rdf_graph(file_path)
     documents = build_documents_from_triples(graph)
