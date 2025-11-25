@@ -6,9 +6,7 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-changeme}
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=false
+      - xpack.security.enabled=false
       - bootstrap.memory_lock=true
     mem_limit: 1g
     ulimits:
@@ -24,10 +22,7 @@ services:
       - es_data:/usr/share/elasticsearch/data
     healthcheck:
       test:
-        [
-          "CMD-SHELL",
-          "curl -u elastic:${ELASTIC_PASSWORD:-changeme} -f http://localhost:9200/_cluster/health || exit 1",
-        ]
+        ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -44,8 +39,6 @@ services:
         condition: service_healthy
     environment:
       - ES_HOST=http://elasticsearch:9200
-      - ES_USER=elastic
-      - ES_PASSWORD=${ELASTIC_PASSWORD:-changeme}
     volumes:
       - ./test.trig:/app/test.trig:ro
     restart: on-failure

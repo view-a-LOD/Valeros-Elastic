@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.INFO,
 logger = logging.getLogger(__name__)
 
 ES_HOST = os.getenv("ES_HOST", "http://localhost:9200")
-ES_USER = os.getenv("ES_USER", "elastic")
-ES_PASSWORD = os.getenv("ES_PASSWORD", "changeme")
+ES_USER = os.getenv("ES_USER")
+ES_PASSWORD = os.getenv("ES_PASSWORD")
 INDEX_NAME = "valeros"
 
 
@@ -158,11 +158,15 @@ def main():
     mapping = create_dynamic_mapping(documents)
 
     logger.info(f"Connecting to Elasticsearch at {ES_HOST}")
-    es = Elasticsearch(
-        [ES_HOST],
-        basic_auth=(ES_USER, ES_PASSWORD),
-        verify_certs=False
-    )
+
+    es_config = {"hosts": [ES_HOST], "verify_certs": False}
+    if ES_USER and ES_PASSWORD:
+        es_config["basic_auth"] = (ES_USER, ES_PASSWORD)
+        logger.info("Using authentication")
+    else:
+        logger.info("No authentication configured")
+
+    es = Elasticsearch(**es_config)
 
     try:
         if not es.ping():
