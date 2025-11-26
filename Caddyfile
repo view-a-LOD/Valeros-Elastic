@@ -43,7 +43,12 @@ hua-sparql.linkeddataviewer.nl {
         respond 204
     }
 
-    # Dataset-specific paths
+    header {
+        Access-Control-Allow-Origin "*"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, HEAD"
+        Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-Auth-Token, Content-Length, Accept"
+    } 
+
     handle_path /Test-Amerongen/* {
         reverse_proxy :7001
     }
