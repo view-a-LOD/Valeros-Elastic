@@ -31,24 +31,6 @@ hua-query.linkeddataviewer.nl {
 }
 
 hua-sparql.linkeddataviewer.nl {
-    @cors_preflight {
-        method OPTIONS
-    }
-    
-    handle @cors_preflight {
-        header Access-Control-Allow-Origin "*"
-        header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, HEAD"
-        header Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-Auth-Token, Content-Length, Accept"
-        header Access-Control-Max-Age "3600"
-        respond 204
-    }
-
-    header {
-        Access-Control-Allow-Origin "*"
-        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, HEAD"
-        Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-Auth-Token, Content-Length, Accept"
-    } 
-
     handle_path /Test-Amerongen/* {
         reverse_proxy :7001
     }
