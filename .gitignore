@@ -8,3 +8,7 @@ __pycache__/
 .env
 
 .dockerignore
+
+data/**
+!data/**/Qleverfile
+qlever-ui-db/qleverui.sqlite3

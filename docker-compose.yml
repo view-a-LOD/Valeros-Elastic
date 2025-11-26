@@ -35,6 +35,17 @@ services:
     networks:
       - elastic
 
+  qlever-ui:
+    image: docker.io/adfreiburg/qlever-ui
+    container_name: qlever-ui
+    volumes:
+      - ./qlever-ui-db:/app/db
+    environment:
+      - QLEVERUI_DATABASE_URL=sqlite:////app/db/qleverui.sqlite3
+    ports:
+      - "8176:7000"
+    restart: unless-stopped
+
   fuseki:
     image: stain/jena-fuseki
     container_name: fuseki
