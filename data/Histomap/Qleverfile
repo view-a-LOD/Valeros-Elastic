@@ -5,7 +5,7 @@ DESCRIPTION       = Histomap dataset
 TEXT_DESCRIPTION  = All literals, search with FILTER CONTAINS(?var, "...")
 
 [index]
-INPUT_FILES     = Histomap.nt
+INPUT_FILES     = Histomap.ttl
 CAT_INPUT_FILES = cat ${INPUT_FILES}
 SETTINGS_JSON   = { "ascii-prefixes-only": false, "num-triples-per-batch": 100000 }
 
