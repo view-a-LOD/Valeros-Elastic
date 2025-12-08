@@ -41,10 +41,10 @@ services:
     volumes:
       - ./qlever-ui-db:/app/db
     environment:
-      - QLEVERUI_SECRET_KEY=${QLEVERUI_SECRET_KEY:?Error: QLEVERUI_SECRET_KEY is required}
-      - QLEVERUI_DEBUG=${QLEVERUI_DEBUG:-False}
-      - QLEVERUI_DATABASE_URL=${QLEVERUI_DATABASE_URL:-sqlite:////app/db/qleverui.sqlite3}
-      - QLEVERUI_CSRF_TRUSTED_ORIGINS=${QLEVERUI_CSRF_TRUSTED_ORIGINS:?Error: QLEVERUI_CSRF_TRUSTED_ORIGINS is required}
+      QLEVERUI_SECRET_KEY: "${QLEVERUI_SECRET_KEY:?Error: QLEVERUI_SECRET_KEY is required}"
+      QLEVERUI_DEBUG: "${QLEVERUI_DEBUG:-False}"
+      QLEVERUI_DATABASE_URL: "${QLEVERUI_DATABASE_URL:-sqlite:////app/db/qleverui.sqlite3}"
+      QLEVERUI_CSRF_TRUSTED_ORIGINS: "${QLEVERUI_CSRF_TRUSTED_ORIGINS:?Error: QLEVERUI_CSRF_TRUSTED_ORIGINS is required}"
     ports:
       - "8176:7000"
     restart: unless-stopped
