@@ -21,7 +21,7 @@ REPLACE_DOTS_WITH_SPACES = os.getenv(
 def load_rdf_graph(file_path: str) -> ConjunctiveGraph:
     logger.info(f"Loading RDF data from {file_path}")
     g = ConjunctiveGraph()
-    g.parse(file_path, format="trig")
+    g.parse(file_path, format="ttl")
     logger.info(f"Loaded {len(g)} triples")
     return g
 
