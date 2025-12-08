@@ -210,10 +210,10 @@ def main():
         documents = build_documents_from_triples(graph)
         mapping = create_dynamic_mapping(documents)
 
-        create_index(
-            es, f"{INDEX_NAME}_{os.path.basename(ttl_file_path).replace('.ttl', '')}", mapping)
-        index_documents(
-            es, f"{INDEX_NAME}_{os.path.basename(ttl_file_path).replace('.ttl', '')}", documents)
+        index_name = f"{INDEX_NAME}_{os.path.basename(ttl_file_path).replace('.ttl', '').lower()}"
+
+        create_index(es, index_name, mapping)
+        index_documents(es, index_name, documents)
 
         logger.info(f"Processed and indexed data from {ttl_file_path}")
 
