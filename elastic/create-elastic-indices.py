@@ -160,13 +160,30 @@ def index_documents(es: Elasticsearch, index_name: str, documents: Dict[str, Dic
         logger.info(f"Successfully indexed {len(documents)} documents")
 
 
-def main():
-    cwd = os.getcwd()
-    file_path = os.path.join(cwd, "data.trig")
+def get_ttl_files(data_folder: str) -> list:
+    ttl_files = []
 
-    graph = load_rdf_graph(file_path)
-    documents = build_documents_from_triples(graph)
-    mapping = create_dynamic_mapping(documents)
+    for root, dirs, files in os.walk(data_folder):
+        found_ttl = False
+        for file in files:
+            if file.endswith('.ttl') and not found_ttl:
+                ttl_file_path = os.path.join(root, file)
+                logger.info(f"Found TTL file: {ttl_file_path}")
+                ttl_files.append(ttl_file_path)
+                found_ttl = True  # Mark that we've found the first .ttl file in this folder
+                break  # Move to the next folder
+
+    return ttl_files
+
+
+def main():
+    data_folder = os.path.join(os.getcwd(), "data")
+
+    ttl_files = get_ttl_files(data_folder)
+
+    if not ttl_files:
+        logger.error("No .ttl files found in the data directory.")
+        return
 
     logger.info(f"Connecting to Elasticsearch at {ES_HOST}")
 
@@ -188,11 +205,19 @@ def main():
         logger.error(f"Failed to connect to Elasticsearch: {e}")
         return
 
-    create_index(es, INDEX_NAME, mapping)
-    index_documents(es, INDEX_NAME, documents)
+    for ttl_file_path in ttl_files:
+        graph = load_rdf_graph(ttl_file_path)
+        documents = build_documents_from_triples(graph)
+        mapping = create_dynamic_mapping(documents)
 
-    logger.info(
-        f"Process complete. Index '{INDEX_NAME}' is ready with {len(documents)} documents")
+        create_index(
+            es, f"{INDEX_NAME}_{os.path.basename(ttl_file_path).replace('.ttl', '')}", mapping)
+        index_documents(
+            es, f"{INDEX_NAME}_{os.path.basename(ttl_file_path).replace('.ttl', '')}", documents)
+
+        logger.info(f"Processed and indexed data from {ttl_file_path}")
+
+    logger.info("Process complete. Indices are ready for each TTL file.")
 
 
 if __name__ == "__main__":
