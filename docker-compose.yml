@@ -67,8 +67,6 @@ services:
 volumes:
   es_data:
     driver: local
-  fuseki_data:
-    driver: local
 
 networks:
   elastic:
