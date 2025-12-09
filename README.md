@@ -1,7 +1,6 @@
 # Valeros Backend
-
-> **Warning**
-> This setup is intended as a work-in-progress proof of concept / demo. It is **not** (yet) production ready: for example, Elasticsearch currently runs without authentication.
+> [!WARNING]
+> This setup is intended as a work-in-progress **proof of concept / demo**. It is **not** (yet) production ready: for example, Elasticsearch currently runs without authentication.
 
 This project provides a **fully open source** data pipeline and backend for turning RDF data in Turtle (`.ttl`) format into searchable Elasticsearch indices and QLever SPARQL endpoints.
 
