@@ -49,11 +49,11 @@ services:
       - "8176:7000"
     restart: unless-stopped
 
-  indexer:
+  elastic-indexer:
     build:
       context: .
       dockerfile: ./elastic/Dockerfile
-    container_name: rdf_indexer
+    container_name: elastic_indexer
     depends_on:
       elasticsearch:
         condition: service_healthy
