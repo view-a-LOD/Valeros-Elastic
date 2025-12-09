@@ -1,4 +1,4 @@
-hua-elastic.linkeddataviewer.nl {
+elastic.linkeddataviewer.nl {
     @cors_preflight {
         method OPTIONS
     }
@@ -14,7 +14,7 @@ hua-elastic.linkeddataviewer.nl {
     reverse_proxy :9200
 }
 
-hua-query.linkeddataviewer.nl {
+query.linkeddataviewer.nl {
     @cors_preflight {
         method OPTIONS
     }
@@ -30,7 +30,7 @@ hua-query.linkeddataviewer.nl {
     reverse_proxy :8176
 }
 
-hua-sparql.linkeddataviewer.nl {
+sparql.linkeddataviewer.nl {
     handle_path /Test-Amerongen/* {
         reverse_proxy :7001
     }
