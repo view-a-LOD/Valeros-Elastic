@@ -61,7 +61,7 @@ services:
       - ES_HOST=http://elasticsearch:9200
       - REPLACE_DOTS_WITH_SPACES=true
       - TTL_FILES_BASE_PATH=/app/data
-      - TTL_FILES=Test-Amerongen/Test-Amerongen.ttl
+      - TTL_FILES=Test-Amerongen/Test-Amerongen.ttl,PoC2024/PoC2024.ttl,PoCAmerongen2024/PoCAmerongen2024.ttl,locaties/locaties.ttl,actoren/actoren.ttl
 
     volumes:
       - ./data:/app/data:ro
