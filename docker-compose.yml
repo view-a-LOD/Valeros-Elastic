@@ -60,6 +60,9 @@ services:
     environment:
       - ES_HOST=http://elasticsearch:9200
       - REPLACE_DOTS_WITH_SPACES=true
+      - TTL_FILES_BASE_PATH=/app/data
+      - TTL_FILES=Beeldbank/Beeldbank.ttl,Gevangenisregisters/Gevangenisregisters.ttl
+
     volumes:
       - ./data:/app/data:ro
     restart: on-failure

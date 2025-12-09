@@ -16,6 +16,8 @@ ES_PASSWORD = os.getenv("ES_PASSWORD")
 INDEX_NAME = "valeros"
 REPLACE_DOTS_WITH_SPACES = os.getenv(
     "REPLACE_DOTS_WITH_SPACES", "false").lower() == "true"
+TTL_FILES_ENV = os.getenv("TTL_FILES")
+TTL_FILES_BASE_PATH_ENV = os.getenv("TTL_FILES_BASE_PATH", os.getcwd())
 
 
 def load_rdf_graph(file_path: str) -> ConjunctiveGraph:
@@ -160,29 +162,38 @@ def index_documents(es: Elasticsearch, index_name: str, documents: Dict[str, Dic
         logger.info(f"Successfully indexed {len(documents)} documents")
 
 
-def get_ttl_files(data_folder: str) -> list:
-    ttl_files = []
+def get_ttl_files_from_env(base_path: str) -> list:
+    if not TTL_FILES_ENV:
+        return []
 
-    for root, dirs, files in os.walk(data_folder):
-        found_ttl = False
-        for file in files:
-            if file.endswith('.ttl') and not found_ttl:
-                ttl_file_path = os.path.join(root, file)
-                logger.info(f"Found TTL file: {ttl_file_path}")
-                ttl_files.append(ttl_file_path)
-                found_ttl = True  # Mark that we've found the first .ttl file in this folder
-                break  # Move to the next folder
+    ttl_files = []
+    raw_paths = [p.strip() for p in TTL_FILES_ENV.split(",") if p.strip()]
+
+    for path in raw_paths:
+        if os.path.isabs(path):
+            resolved = path
+        else:
+            resolved = os.path.join(base_path, path)
+
+        if os.path.isfile(resolved):
+            ttl_files.append(resolved)
+            logger.info(f"Using TTL file from TTL_FILES env: {resolved}")
+        else:
+            logger.warning(
+                f"TTL file from TTL_FILES env not found or not a file: {resolved}")
 
     return ttl_files
 
 
 def main():
-    data_folder = os.path.join(os.getcwd(), "data")
+    ttl_files = get_ttl_files_from_env(TTL_FILES_BASE_PATH_ENV)
 
-    ttl_files = get_ttl_files(data_folder)
-
-    if not ttl_files:
-        logger.error("No .ttl files found in the data directory.")
+    if ttl_files:
+        logger.info(
+            "Using TTL files specified via TTL_FILES environment variable, resolved against TTL_FILES_BASE_PATH")
+    else:
+        logger.error(
+            "No valid TTL files resolved. Set TTL_FILES (and optionally TTL_FILES_BASE_PATH) to explicit TTL file paths.")
         return
 
     logger.info(f"Connecting to Elasticsearch at {ES_HOST}")
