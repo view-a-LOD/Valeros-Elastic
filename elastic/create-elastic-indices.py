@@ -4,7 +4,7 @@ from collections import defaultdict
 from typing import Any, Dict, Set
 
 from elasticsearch import Elasticsearch
-from rdflib import ConjunctiveGraph, Literal, URIRef
+from rdflib import Dataset, Literal, URIRef
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s [%(levelname)s] %(message)s")
@@ -20,15 +20,15 @@ TTL_FILES_ENV = os.getenv("TTL_FILES")
 TTL_FILES_BASE_PATH_ENV = os.getenv("TTL_FILES_BASE_PATH", os.getcwd())
 
 
-def load_rdf_graph(file_path: str) -> ConjunctiveGraph:
+def load_rdf_graph(file_path: str) -> Dataset:
     logger.info(f"Loading RDF data from {file_path}")
-    g = ConjunctiveGraph()
+    g = Dataset()
     g.parse(file_path, format="ttl")
     logger.info(f"Loaded {len(g)} triples")
     return g
 
 
-def build_documents_from_triples(graph: ConjunctiveGraph) -> Dict[str, Dict[str, Any]]:
+def build_documents_from_triples(graph: Dataset) -> Dict[str, Dict[str, Any]]:
     logger.info("Building documents from triples")
     if REPLACE_DOTS_WITH_SPACES:
         logger.info("Dot-to-space replacement is ENABLED for all URIs")
